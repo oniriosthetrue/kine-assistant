@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 *.tmp
 .DS_Store
+
+# KB2 : sources brutes (regenerables) non versionnees
+kb2/sources-fr/
+kb2/sources-en/
+kb2/_out/
