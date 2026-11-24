@@ -28,6 +28,7 @@ Un assistant Open WebUI pour kinésithérapeute libéral qui :
 - `05a-remboursement-prise-en-charge`, `05b-acces-direct-kine`, `05c-accords-prealables-apa`
 - `06-dpc-developpement-professionnel-continu`, `07-deontologie-ordre-mk`,
   `08-teletransmission-fse-vitale` (ajoutés 2026-11-24)
+- Reranker : `Qwen3-Reranker-4B` 4-bit, actif et câblé OWUI (voir §6ter).
 - Sur disque mais NON indexés (remplacés) : `04b-ngap-actes-chapitre-II.md`,
   `04-nomenclature-actes-ngap.md`
 - ⚠️ GET `/knowledge/{id}/files` renvoie la liste sous la clé **`items`** (pas `data`) en 0.13.4.
@@ -127,9 +128,22 @@ PAS à `innerText` via Playwright (peut montrer le texte pré-filtre).
 - **Le retrieval RAG ne marche qu'en UI (mode agent)** : la route OpenAI-compat
   `/chat/completions` n'exécute PAS `query_knowledge_files` → ne jamais valider le RAG en curl.
 
+## 6ter. Reranker — évalué et validé (2026-11-24)
+Le reranker **Qwen3-Reranker-4B (4-bit)** est **déjà installé, actif et câblé à Open WebUI**
+(config RAG globale : `rag.reranking_engine=external`, `rag.reranking_model=Qwen/Qwen3-Reranker-4B`,
+`rag.external_reranker_url=http://embedding:8080/v1/rerank`, `rag.top_k=3`). Le retrieval du kiné
+(mode agent `query_knowledge_files`) l'utilise déjà.
+
+**Test A/B kiné** (`test_rerank_ab.py`, 12 questions paraphrasées ancrées sur le corpus, hit@3) :
+- embedding seul : **7/12 = 58 %**
+- + rerank 4B : **12/12 = 100 %** (**+5 questions**, dont accès direct 8 séances, IFS/IFD,
+  renouvellement < 1 an, télésoin TMK, majoration dimanche).
+→ Gain net et sans ambiguïté : le reranker corrige tous les faux négatifs d'embedding sur ce corpus.
+Lancer : `python3 test_rerank_ab.py` (service embedding sur `localhost:8001`).
+
 ## 7. Ce qui reste à faire / pistes
 - [x] Étoffer le corpus (DPC, éthique Ordre, télétransmission) — fait 2026-11-24 (13 fichiers).
-- [ ] Éventuellement passer le corpus en embedding 4 bits / reranker (projet séparé, NON lancé).
+- [x] Reranker évalué — fait 2026-11-24 : déjà actif, hit@3 58 % → 100 % (`test_rerank_ab.py`).
 - [ ] Surveiller les faux négatifs du filtre (donnée patient non masquée) en usage réel.
 
 ## 8. Mémoire liée
