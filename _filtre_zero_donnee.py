@@ -129,17 +129,32 @@ _PATIENT_DATA_RE = re.compile(
 )
 
 
+# Signaux d'INTENTION DE REDACTION (= MODE 2 du prompt). Une demande de
+# courrier/CR peut ne citer AUCUNE donnee patient codable (ex "redige un CR
+# pour la seance du 12/03/2026") : sans ce signal, la date resterait en clair.
+# On n'utilise QUE des substantifs de document (pas de verbe seul : "fais-moi
+# un calcul" ne doit PAS declencher). En cas de doute, mode agressif : masquer
+# trop vaut mieux que laisser fuiter une donnee patient.
+_WRITING_INTENT_RE = re.compile(
+    r"(?i)(?:\bcourri(?:er|ers)\b|\blettre\b|\bcompte[-\s]?rendus?\b|\bCR\b"
+    r"|\bordonnance\b|\battestation\b|\bcertificat\b|\bconclusion\b"
+    r"|\bgabarit\b|\bmodele\b|\btrame\b)"
+)
+
+
 def _has_patient_data(messages) -> bool:
     """Le mode agressif se declenche sur la DERNIERE question de l'utilisateur
     uniquement : un suivi du type « et le taux de remboursement ? » ne doit pas
     rester en mode courrier a cause d'un nom cite plus haut dans le fil. (Le
-    nom reste de toute facon toujours masque, c'est un motif sur.)"""
+    nom reste de toute facon toujours masque, c'est un motif sur.)
+    Declencheurs : une donnee patient codable OU une intention de redaction."""
     for message in reversed(messages):
         if message.get("role") != "user":
             continue
         content = message.get("content")
         if isinstance(content, str):
-            return bool(_PATIENT_DATA_RE.search(content))
+            return bool(_PATIENT_DATA_RE.search(content)
+                        or _WRITING_INTENT_RE.search(content))
         return False
     return False
 
