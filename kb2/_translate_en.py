@@ -66,7 +66,13 @@ def load_glossary() -> str:
 
 
 def load_sections(chapters: list[int]) -> dict:
-    """Retourne {section_key: {meta, text}} en ignorant les chunks overlap."""
+    """Retourne {section_key: {meta, blocks}} en ignorant les chunks overlap.
+
+    Chaque section est decomposee en BLOCS ordonnes par sous-section
+    (champ subsection_title + source_level de la source OpenStax), afin de
+    restaurer la hierarchie de titres markdown a la traduction. Les chunks
+    consecutifs d'une meme sous-section sont fusionnes en un seul bloc.
+    """
     sections: dict[str, dict] = {}
     with open(CHUNKS, encoding="utf-8") as fh:
         for line in fh:
@@ -81,13 +87,24 @@ def load_sections(chapters: list[int]) -> dict:
                 "chapter_title": d["chapter_title"],
                 "section_num": d["section_num"],
                 "section_title": d.get("section_title", ""),
-                "parts": [],
+                "blocks": [],  # [{level, title, parts[]}]
             })
             txt = d.get("text", "").strip()
-            if txt:
-                sec["parts"].append(txt)
+            if not txt:
+                continue
+            sub = (d.get("subsection_title") or "").strip()
+            level = d.get("source_level") or 2
+            cur = sec["blocks"][-1] if sec["blocks"] else None
+            if cur is not None and cur["title"] == sub and cur["level"] == level:
+                cur["parts"].append(txt)
+            else:
+                sec["blocks"].append(
+                    {"level": level, "title": sub, "parts": [txt]}
+                )
     for sec in sections.values():
-        sec["text"] = "\n\n".join(sec["parts"])
+        for b in sec["blocks"]:
+            b["text"] = "\n\n".join(b["parts"])
+        sec["text"] = "\n\n".join(b["text"] for b in sec["blocks"])
     return sections
 
 
@@ -180,7 +197,22 @@ def process(key: str, sec: dict, glossary: str) -> None:
         return
     t0 = time.time()
     fr_title = translate_title(sec["section_title"] or sec["chapter_title"], glossary)
-    fr_body = translate_body(sec["text"], glossary)
+    # Traduit chaque bloc (sous-section) separement et injecte son titre
+    # markdown. Le niveau wiki source_level 2 -> ##, 3 -> ### (H1 = titre
+    # de section). Exploite par le markdown_header_text_splitter d'OWUI.
+    body_parts = []
+    failed = False
+    for b in sec["blocks"]:
+        fr_sub = translate_title(b["title"], glossary) if b["title"] else ""
+        fr_block = translate_body(b["text"], glossary)
+        if "[TRADUCTION ECHOUEE]" in fr_block:
+            failed = True
+        md_level = "#" * min(max(b["level"], 2), 4)
+        if fr_sub:
+            body_parts.append(f"{md_level} {fr_sub}\n\n{fr_block}")
+        else:
+            body_parts.append(fr_block)
+    fr_body = "\n\n".join(body_parts)
     header = (
         f"# {fr_title or sec['section_title']}\n\n"
         f"> OpenStax Anatomy & Physiology 2e (CC-BY-4.0), ch. "
@@ -194,11 +226,10 @@ def process(key: str, sec: dict, glossary: str) -> None:
     os.replace(tmp, path)
     with _print_lock:
         _counter["done"] += 1
-        ok = "[TRADUCTION ECHOUEE]" not in fr_body
-        if not ok:
+        if failed:
             _counter["fail"] += 1
         print(f"[{_counter['done']}] {key} {fr_title!r} "
-              f"({time.time()-t0:.0f}s){'' if ok else ' ECHEC'}", flush=True)
+              f"({time.time()-t0:.0f}s){'' if not failed else ' ECHEC'}", flush=True)
 
 
 def main() -> None:
