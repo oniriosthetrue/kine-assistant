@@ -121,6 +121,16 @@ scrubbed = _scrub("Loi du 19/05/2023 : 8 seances sur 3 mois.", aggressive=False)
 check("date de loi conservee", "19/05/2023" in scrubbed)
 check("8 seances conserve", "8 seances" in scrubbed)
 
+# --- Cas UI 4 : duree de referentiel en annees (DPC) => conservee ------------
+print("Cas UI 4 - duree referentiel en annees (DPC)")
+q = user("Le DPC est-il obligatoire ?")
+check("question DPC = non-agressif", _has(q) is False)
+scrubbed = _scrub("Obligatoire par cycle de 3 ans, au moins 1 action par an.",
+                  aggressive=False)
+check("cycle 3 ans conserve", "3 ans" in scrubbed)
+check("age patient masque en agressif",
+      "45 ans" not in _scrub("Patient age de 45 ans.", aggressive=True))
+
 # --- Protection des champs [ ... ] (jamais touches) --------------------------
 print("Protection des champs [ ... ]")
 scrubbed = _scrub("Patient [A COMPLETER], EVA [A COMPLETER], pathologie [preciser].",

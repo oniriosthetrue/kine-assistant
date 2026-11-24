@@ -32,8 +32,11 @@ _SAFE_PATTERNS = [
     (r"\b\d{1,3}\s*/\s*(?:10|100|5)\b(?!\s*/)", None),
     # Taille au format "1m75".
     (r"\b\d{1,2}m\d{2}\b", None),
-    # Age : jamais une valeur de referentiel dans ce corpus -> toujours gratte.
-    (r"(?i)\b\d{1,3}\s*ans?\b", None),
+    # NB : l'AGE est passe en motifs AMBIGUS. Une duree de referentiel peut
+    # s'ecrire en annees ("cycle DPC de 3 ans", "a partir de 65 ans") ; en
+    # MODE 1 (pas de patient) ce n'est PAS une donnee patient. En MODE 2
+    # (courrier, mode agressif) l'age est gratte, et le modele n'a pas le
+    # droit d'ecrire un age patient en dur de toute facon.
 ]
 
 # --- Motifs "ambigus" : peuvent designer AUSSI une donnee de referentiel
@@ -60,6 +63,8 @@ _AMBIGUOUS_PATTERNS = [
     (r"(?i)(\bs[ée]ances?\s+)(?:\d+\s*[àa\-–~]\s*\d+|\d+)", r"\g<1>[A COMPLETER]"),
     # Nombre + unite (cm, mm, kg, degres, %).
     (r"(?i)\b\d{1,3}(?:[.,]\d+)?\s*(?:cm|mm|kg|°|degr[ée]s|%)", None),
+    # Age (deplace des motifs surs) : gratte seulement en mode agressif.
+    (r"(?i)\b\d{1,3}\s*ans?\b", None),
     # Valeur isolee apres un libelle de donnee patient (ex "seances : 18").
     (r"(?i)(\b(?:seances?|s[ée]ances?|age|poids|taille|tension|fr[ée]quence|rythme|nombre)\b"
      r"[ \t]*:?[ \t]*)(\d+(?:[.,]\d+)?)", r"\1[A COMPLETER]"),
