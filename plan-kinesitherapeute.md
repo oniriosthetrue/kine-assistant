@@ -1,0 +1,156 @@
+# Plan de communication — L'IA dans un cabinet de kinésithérapie
+
+> Cible : un **kinésithérapeute libéral, praticien seul** (pas de secrétaire), **déjà
+> équipé de Doctolib** pour la prise de rendez-vous, les rappels et la communication patients.
+> Objectif : **structurer le discours** pour montrer, honnêtement, ce que l'IA apporte à ce
+> cabinet — **sans jamais demander la moindre information patient**.
+
+---
+
+## 0. L'angle unique : « Cet outil ne te demande JAMAIS une info patient »
+
+Tout le discours tient sur une phrase. On ne promet **pas** de protéger les données de santé
+du cabinet — on promet de **ne jamais les recevoir**. C'est plus simple, plus crédible, et ça
+désarme la question HDS/RGPD à la source.
+
+> *« Tu ne tapes jamais un nom, jamais une maladie dedans. Il te fait gagner du temps sur tout
+> ce qui est rédaction, gestion, formation, éducation. Et pour les courriers patients, il te
+> prépare le modèle que tu remplis toi-même. Résultat : aucune donnée de santé à lui confier,
+> donc aucun risque, aucune question HDS à te poser. »*
+
+**Pourquoi cet angle est plus fort que « on sécurise tes données » :**
+la confiance repose sur une **absence** (rien ne sort), pas sur une promesse technique qu'un
+kiné ne peut pas vérifier. On ne peut pas pirater, perdre ou revendre ce qu'on n'a jamais eu.
+
+### Les 3 idées à faire passer, dans cet ordre
+1. **Le temps perdu du kiné solo est surtout du rédactionnel sans patient** → c'est là que l'IA agit.
+2. **La donnée patient n'a pas besoin de sortir** → gabarit neutre, rempli en local par le kiné.
+3. **L'humain garde la main** → l'IA prépare, le kiné valide, signe et assume.
+
+---
+
+## 1. Le problème qu'on résout (parler son langage, pas celui de la tech)
+
+Un kiné solo est à la fois praticien, secrétaire, comptable et responsable com. Tout ce qui
+n'est **pas une séance** est du **temps non facturé**, et c'est énorme :
+
+- comptes-rendus et **courriers aux médecins** ;
+- ordonnances / ententes préalables, attestations ;
+- facturation, télétransmission, **relances d'impayés** ;
+- téléphone (appels, reprogrammations, questions répétées) ;
+- achats/fournisseurs, prépas comptables ;
+- communication (site, infos patients) ;
+- formation / veille (DPC, lecture d'articles).
+
+**Le déclic à provoquer :** la **grande majorité** de ces tâches ne contient **aucune donnée
+patient nominative**. Elles sont donc **100 % traitables par l'IA, sans risque**. C'est ça, le
+vrai gisement de temps — et on n'a pas besoin d'y toucher, aux données de santé, pour le récupérer.
+
+> **Chiffre à construire avec lui** (pas à lui imposer) : estimer, en heures/semaine, le temps
+> non facturé. C'est LE nombre qui parle à un libéral, et la base de toute la démo.
+
+---
+
+## 2. Ce que l'IA fait SANS aucune donnée patient (le cœur du pitch)
+
+À montrer en démo, parce que c'est là que le gain est immédiat et sans risque.
+
+| Domaine | Ce que l'IA produit | Entrée (aucune donnée patient) |
+|---|---|---|
+| **Courriers & courriers types** | Courrier au médecin, à la caisse, à l'assureur, relance impayé, accusé, attestation | « rédige un courrier de relance impayé, ton pro » |
+| **Trames de comptes-rendus** | Une **trame neutre** de CR (ex. fin de rééduc lombalgie) à remplir soi-même | « trame de CR de fin de rééduc pour lombalgie chronique » |
+| **Éducation du patient** | Fiches d'exercices, conseils de reprise, explication d'une pathologie | contenu **générique**, personnalisé ensuite par le kiné |
+| **Veille & formation (DPC)** | Résumer un article, une reco HAS, un protocole, préparer un dossier | littérature **publique**, aucun patient |
+| **Gestion du cabinet** | E-mails fournisseurs, comparatif de devis, notes, prépa RDV comptable | administratif pur |
+| **Communication** | Site web, fiches d'info, messages « horaires / cabinet fermé », FAQ | information générale |
+
+> Message : « sur tout ça, la donnée patient **n'existe pas dans ce que tu saisis**. Donc rien
+> à protéger, rien qui sort — et pourtant c'est la plus grosse part de ton temps perdu. »
+
+---
+
+## 3. Et pour les courriers qui concernent un patient ? Le principe du « gabarit »
+
+On ne supprime pas le besoin, on le **déplace au bon endroit** :
+
+1. Le kiné demande au LLM une **trame neutre** : « courrier de CR pour [PATHOLOGIE], ton pro ».
+2. Le LLM renvoie le texte avec des **champs à remplir** (`[NOM]`, `[PATHOLOGIE]`, `[DATES]`).
+3. Le kiné **remplit les vrais champs lui-même**, dans son logiciel — **hors LLM**.
+
+→ Résultat **exact** (vrai courrier pour vrai patient) **et** le LLM n'a **jamais** vu la donnée.
+On a le gain de temps **et** zéro donnée de santé sortante. C'est la réponse à « mais si on
+n'envoie rien, ça sert à quoi ? » : ça sert à tout, sauf à manipuler la donnée — et c'est voulu.
+
+### Pourquoi « il suffit d'anonymiser » n'est PAS la bonne réponse (à avoir sous le coude)
+- **Pseudonymiser** (« M. ABC a un cancer ») ≠ anonymiser : tant que la correspondance existe
+  quelque part, ça reste une **donnée de santé personnelle** (RGPD + HDS s'appliquent).
+- **La maladie reste la donnée sensible** : enlever le nom ne suffit pas.
+- Les techniques d'anonymisation « forte » (k-anonymat, bruit, données synthétiques) **détruisent
+  l'utilité** ici : on ne peut pas mettre un faux âge dans un vrai courrier médical, ni noyer un
+  patient unique dans un groupe. Elles sont faites pour l'analyse de masse, pas la rédaction unitaire.
+- **Conclusion** : la bonne réponse n'est pas une technique d'anonymisation, c'est l'**architecture**
+  (gabarit + remplissage local). À garder en réserve d'argument, pas en slide d'ouverture.
+
+---
+
+## 4. La frontière : ce que l'IA ne fait PAS (ça crée la confiance)
+
+- **Pas de diagnostic, pas de choix du plan de soin** : acte du praticien, sous sa responsabilité.
+- **Ne remplace ni le toucher, ni l'observation clinique, ni le lien humain** — le cœur du métier.
+- **Rien d'automatisé qui part vers l'extérieur sans validation** (courrier, mail patient) : l'IA
+  prépare, le kiné relit et envoie.
+- **Ne duplique pas Doctolib** : RDV, rappels, paiement, télétransmission restent chez Doctolib.
+  L'IA prend ce que Doctolib ne fait pas (rédactionnel, back-office, veille, éducation).
+
+---
+
+## 5. Le cadre, en une phrase rassurante (argument, pas contrainte)
+
+Pas besoin d'un cours de droit au kiné — juste de lever l'inquiétude :
+
+- **Données de santé = très protégées** (RGPD art. 9, hébergement **HDS**). → Justement : ici
+  **aucune donnée de santé ne sort du cabinet**, donc le sujet ne se pose pas.
+- **Secret médical + Ordre des MK** : l'outil est conçu pour ne jamais mettre le kiné en faute.
+- **AI Act** : principe « l'IA assiste, le praticien décide et signe ».
+- **Une règle d'or écrite dans l'outil et la CGU** : *« ne saisis jamais de nom ni d'info patient ».*
+  (Sans ce rappel visible, un kiné distrait collerait un nom un jour — et la promesse tomberait.)
+
+> Nuance d'honnêteté à garder pour soi : si un jour on veut un usage où la donnée patient entre
+> vraiment (ex. « reformule ce CR que j'ai écrit »), alors il faut un **modèle local sur le PC du
+> kiné** (la donnée ne sort pas) — et le contrat doit l'écrire. On ne promet pas ce qu'on ne peut
+> pas faire proprement.
+
+---
+
+## 6. La démarche proposée (sans engagement)
+
+1. **Atelier d'écoute** (1 à 2 h) : inventaire des outils (surtout ce que Doctolib couvre déjà) +
+   journée type + irritants. On chiffre le temps non facturé.
+2. **Démonstration sans risque** : sur des tâches **sans donnée patient** (courriers types,
+   trames de CR, éducation, veille) — résultats visibles immédiatement.
+3. **Pilote sur 1-2 cas concrets** (pas 10) : ex. les courriers/relances + la synthèse
+   documentaire. Périmètre clair, on mesure le temps gagné.
+4. **Bilan** : ce qui marche, ce qui ne marche pas, décision ensemble. Rien d'engagé, rien de
+   payant à ce stade.
+
+---
+
+## 7. Positionnement MinervIA (les 4 messages à laisser)
+
+- **Zéro donnée patient** : l'outil n'en demande jamais — c'est ça, la vraie sécurité.
+- **Complément de Doctolib, pas concurrent** : Doctolib garde le RDV et les rappels ; MinervIA
+  prend le rédactionnel, le back-office, la veille, l'éducation.
+- **L'humain garde la main** : l'IA prépare, le kiné valide, signe et assume.
+- **On entre par l'aide** : diagnostic puis pilote gratuit, sans facturation ni engagement.
+
+---
+
+## 8. Prochaine étape
+
+- [x] Profil confirmé : **praticien seul**, déjà sur Doctolib.
+- [x] Angle retenu : **« l'IA qui ne demande jamais une info patient »** (gabarit + remplissage local).
+- [ ] Rédiger le **deck de présentation** adapté (même esprit que la mairie : honnête, local,
+      « l'IA assiste, le praticien décide »), structuré sur les sections 2 → 7 ci-dessus.
+- [ ] Préparer la **démo sans risque** (courriers types, trame de CR, éducation, veille) —
+      aucun champ patient dans la démo.
+- [ ] Lors du 1er contact : inventaire des outils + estimation du **temps non facturé hebdo**.

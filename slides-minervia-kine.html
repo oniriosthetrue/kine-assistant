@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MinervIA — Cabinet de kinésithérapie</title>
+<style>
+  :root{
+    --primary: hsl(188 70% 30%);
+    --primary-bright: hsl(188 75% 52%);
+    --primary-soft: hsl(188 75% 52% / 0.16);
+    --primary-line: hsl(188 75% 52% / 0.30);
+    --ink: hsl(200 20% 96%);
+    --muted: hsl(200 16% 76%);
+    --card: hsl(200 30% 15% / 0.55);
+    --ok: hsl(152 60% 50%);
+    --no: hsl(0 70% 62%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:#06141a;
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+  .deck{width:100%;max-width:1680px;padding:10px}
+  .slide{
+    display:none;
+    background:
+      linear-gradient(135deg, hsl(196 47% 9% / 0.97) 0%, hsl(196 47% 11% / 0.92) 45%, hsl(188 70% 24% / 0.85) 100%);
+    border-radius:22px;
+    box-shadow:0 30px 80px rgba(2,12,18,.45);
+    overflow:hidden;
+    min-height:min(calc((100vw - 20px) * 9 / 16), calc(100vh - 20px));
+    position:relative;
+  }
+  .slide.active{display:flex;flex-direction:column}
+  .pad{padding:40px 56px;flex:1;display:flex;flex-direction:column}
+
+  .top{display:flex;align-items:center;justify-content:space-between;
+       padding:22px 64px;border-bottom:1px solid var(--primary-line)}
+  .brand{font-weight:800;font-size:22px;color:#fff;letter-spacing:-.5px}
+  .brand small{font-weight:600;color:var(--muted);font-size:13px;margin-left:10px}
+  .kicker{font-size:15px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary-bright)}
+  .pageno{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  h1{font-size:52px;line-height:1.08;letter-spacing:-1px;margin:12px 0 10px;color:#fff}
+  h2{font-size:42px;line-height:1.1;letter-spacing:-.6px;margin:8px 0 6px;color:#fff}
+  .lead{font-size:24px;color:var(--muted);line-height:1.5;max-width:64ch}
+  .lead b{color:#fff}
+
+  .grid{display:grid;gap:14px;margin-top:20px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .card{
+    border:1px solid var(--primary-line);
+    border-radius:16px;padding:18px 20px 20px;
+    background:var(--card);backdrop-filter:blur(4px);
+  }
+  .card .ic{width:40px;height:40px;border-radius:10px;background:var(--primary-bright);color:#fff;
+            display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;margin-bottom:10px}
+  .card h3{font-size:22px;margin-bottom:6px;color:#fff}
+  .card p{font-size:18px;color:var(--muted);line-height:1.45}
+
+  .pill{display:inline-flex;align-items:center;gap:8px;
+        background:var(--primary-soft);color:#fff;
+        border:1px solid var(--primary-line);
+        padding:9px 16px;border-radius:999px;font-weight:700;font-size:17px}
+  .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+
+  .foot{display:flex;align-items:center;justify-content:space-between;
+        padding:18px 64px;border-top:1px solid var(--primary-line);
+        font-size:16px;color:var(--muted);background:hsl(196 47% 6% / 0.55)}
+  .foot b{color:#fff}
+  .foot .src{font-style:italic;font-size:14px}
+
+  .note{margin-top:auto;font-size:16px;color:var(--muted);font-style:italic}
+
+  table.cases{width:100%;border-collapse:collapse;margin-top:22px;font-size:18px}
+  table.cases th,table.cases td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--primary-line);vertical-align:top}
+  table.cases th{color:var(--primary-bright);font-size:14px;text-transform:uppercase;letter-spacing:.08em}
+  table.cases td b{color:#fff}
+  table.cases td{color:var(--muted)}
+
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+  .step{border:1px solid var(--primary-line);border-radius:16px;padding:18px 20px;background:var(--card)}
+  .step .n{width:38px;height:38px;border-radius:50%;background:var(--primary-bright);color:#fff;
+           display:flex;align-items:center;justify-content:center;font-weight:800;margin-bottom:12px;font-size:19px}
+  .step h3{font-size:21px;margin-bottom:6px;color:#fff}
+  .step p{font-size:17px;color:var(--muted);line-height:1.5}
+
+  .quote{font-size:26px;line-height:1.45;color:#fff;font-weight:600;max-width:60ch;
+         border-left:4px solid var(--primary-bright);padding-left:22px;margin-top:18px}
+
+  .thanks{align-items:center;justify-content:center;text-align:center;padding-bottom:24px}
+  .thanks h1{font-size:64px;margin:18px 0 14px}
+  .thanks .lead{max-width:60%;margin:0 auto}
+  .thanks .row{justify-content:center}
+
+  /* nav */
+  .nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+       display:flex;gap:10px;align-items:center;z-index:50}
+  .nav button{cursor:pointer;border:0;background:rgba(255,255,255,.14);color:#fff;
+       width:40px;height:40px;border-radius:50%;font-size:18px;backdrop-filter:blur(6px)}
+  .nav button:hover{background:rgba(255,255,255,.28)}
+  .dots{display:flex;gap:8px;margin:0 6px}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35)}
+  .dot.on{background:#fff}
+
+  @media print{
+    body{background:#06141a;display:block}
+    .deck{max-width:none;padding:0}
+    .slide{display:flex !important;break-after:page;box-shadow:none;border-radius:0;
+           aspect-ratio:auto;min-height:100vh}
+    .nav{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- SLIDE 1 — Accroche -->
+  <section class="slide active">
+    <div class="top">
+      <div class="brand">MinervIA <small>L'IA souveraine hébergée en France</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 1 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">L'IA au cabinet, en toute sérénité</span>
+      <h1>Un assistant qui ne vous demande<br/>jamais une info patient</h1>
+      <p class="lead">Vous passez vos soirées sur les courriers, les comptes-rendus, les relances ?
+        L'IA peut vous rendre ce temps — <b>sans que vous n'ayez jamais à saisir un nom ni une
+        maladie dedans</b>. C'est précisément ce qui rend l'outil simple et sans risque.</p>
+      <div class="row">
+        <span class="pill">Zéro donnée patient saisie</span>
+        <span class="pill">Complément de Doctolib, pas concurrent</span>
+        <span class="pill">Vous gardez la main</span>
+      </div>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span><span class="src">L'IA assiste — le praticien décide et signe</span></div>
+  </section>
+
+  <!-- SLIDE 2 — Le problème -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>Le problème</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 2 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">Le temps qui vous échappe</span>
+      <h2>Quand on est seul, on est aussi<br/>secrétaire, comptable et « comm »</h2>
+      <p class="lead">Tout ce qui n'est <b>pas une séance</b> est du temps non facturé. Et la
+        grande majorité de ce temps <b>ne contient aucune donnée patient</b> — donc elle est
+        récupérable sans le moindre risque.</p>
+      <div class="grid g3">
+        <div class="card"><div class="ic">✎</div><h3>Rédactionnel</h3>
+          <p>Courriers aux médecins, trames de comptes-rendus, attestations, relances d'impayés.</p></div>
+        <div class="card"><div class="ic">▤</div><h3>Gestion</h3>
+          <p>Devis fournisseurs, notes, préparation du rendez-vous comptable, e-mails.</p></div>
+        <div class="card"><div class="ic">◷</div><h3>Veille & com</h3>
+          <p>Formation DPC, synthèse d'articles, contenu du site, infos patients, FAQ.</p></div>
+      </div>
+      <p class="note">Le vrai gisement de temps n'est pas le soin : c'est tout ce qui l'entoure.
+        Et il ne demande aucune donnée de santé pour être gagné.</p>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span></div>
+  </section>
+
+  <!-- SLIDE 3 — Ce que l'IA fait sans donnée patient -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>Sans aucune donnée patient</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 3 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">Le cœur du sujet</span>
+      <h2>Tout ce que l'IA fait sans jamais<br/>voir un patient</h2>
+      <table class="cases">
+        <tr><th>Domaine</th><th>Ce que l'IA produit</th><th>Ce que vous saisissez</th></tr>
+        <tr><td><b>Courriers types</b></td><td>Relance impayé, courrier caisse/assureur, accusé, attestation</td><td>« rédige une relance impayé, ton pro »</td></tr>
+        <tr><td><b>Trames de CR</b></td><td>Une trame neutre de compte-rendu à remplir vous-même</td><td>« trame de CR fin de rééduc, lombalgie »</td></tr>
+        <tr><td><b>Éducation</b></td><td>Fiches d'exercices, conseils de reprise, explication d'une pathologie</td><td>contenu générique, que vous personnalisez</td></tr>
+        <tr><td><b>Veille / DPC</b></td><td>Résumé d'un article, d'une reco HAS, préparation d'un dossier</td><td>de la littérature publique</td></tr>
+        <tr><td><b>Gestion & com</b></td><td>E-mails fournisseurs, site, fiches d'info, messages d'horaires</td><td>de l'administratif pur</td></tr>
+      </table>
+      <p class="note">Sur tout ça, la donnée patient n'existe pas dans ce que vous tapez.
+        Rien à protéger, rien qui sort — et pourtant c'est l'essentiel du temps gagné.</p>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span></div>
+  </section>
+
+  <!-- SLIDE 4 — Le principe du gabarit -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>Le principe du « gabarit »</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 4 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">Et pour un courrier qui concerne un patient ?</span>
+      <h2>Le modèle est neutre.<br/>Vous le remplissez vous-même.</h2>
+      <div class="grid g3">
+        <div class="step"><div class="n">1</div><h3>Vous demandez</h3>
+          <p>« Courrier de CR pour [pathologie], ton professionnel ». Aucune info patient envoyée.</p></div>
+        <div class="step"><div class="n">2</div><h3>L'IA répond</h3>
+          <p>Un texte avec des champs à remplir : [NOM], [PATHOLOGIE], [DATES].</p></div>
+        <div class="step"><div class="n">3</div><h3>Vous remplissez</h3>
+          <p>Vous saisissez les vrais champs dans votre logiciel — hors IA.</p></div>
+      </div>
+      <p class="quote">Résultat exact pour un vrai patient, et l'IA n'a jamais vu la donnée.
+        Le gain de temps, sans la donnée de santé.</p>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span><span class="src">La donnée patient ne quitte jamais votre cabinet</span></div>
+  </section>
+
+  <!-- SLIDE 5 — La frontière -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>Ce qu'elle ne remplace pas</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 5 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">La frontière, claire</span>
+      <h2>L'IA assiste. Le praticien décide.</h2>
+      <div class="grid g2">
+        <div class="card"><div class="ic" style="background:var(--no)">!</div><h3>Pas de diagnostic</h3>
+          <p>Le diagnostic et le plan de soin restent votre acte, sous votre responsabilité.</p></div>
+        <div class="card"><div class="ic" style="background:var(--no)">!</div><h3>Pas le lien humain</h3>
+          <p>Le toucher, l'observation clinique, l'accompagnement : le cœur du métier, irremplaçable.</p></div>
+      </div>
+      <div class="grid g2">
+        <div class="card"><div class="ic" style="background:var(--no)">!</div><h3>Rien ne part sans vous</h3>
+          <p>Un courrier, un mail patient : l'IA prépare, vous relisez et vous envoyez.</p></div>
+        <div class="card"><div class="ic" style="background:var(--no)">!</div><h3>Ne duplique pas Doctolib</h3>
+          <p>RDV, rappels, paiement, télétransmission restent chez Doctolib. L'IA prend le reste.</p></div>
+      </div>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span><span class="src">Secret médical · Ordre des MK · AI Act : l'humain garde la main</span></div>
+  </section>
+
+  <!-- SLIDE 6 — Le cadre rassurant -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>Le cadre, en une phrase</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 6 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">Données de santé : le sujet ne se pose pas</span>
+      <h2>Aucune donnée de santé ne sort<br/>du cabinet — donc rien à protéger</h2>
+      <p class="lead">Les données de santé sont très protégées (RGPD, hébergement <b>HDS</b>).
+        C'est justement la raison pour laquelle l'outil est conçu pour <b>ne jamais en recevoir</b> :
+        la confiance repose sur une absence, pas sur une promesse.</p>
+      <div class="grid g3">
+        <div class="card"><div class="ic">0</div><h3>Zéro saisie patient</h3>
+          <p>La règle est écrite dans l'outil : ne jamais saisir de nom ni d'info patient.</p></div>
+        <div class="card"><div class="ic">FR</div><h3>Hébergé en France</h3>
+          <p>Pour les usages sans patient, les modèles tournent sur une infrastructure française.</p></div>
+        <div class="card"><div class="ic">✓</div><h3>Conforme par design</h3>
+          <p>Secret médical et RGPD respectés à la source : la donnée sensible n'entre pas.</p></div>
+      </div>
+      <p class="note">Pas de cours de droit : on lève l'inquiétude au lieu de la gérer.</p>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span></div>
+  </section>
+
+  <!-- SLIDE 7 — La démarche -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>La démarche proposée</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 7 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">Comment on avance, ensemble</span>
+      <h2>On commence petit, encadré,<br/>et sans engagement</h2>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h3>Atelier d'écoute</h3>
+          <p>On regarde ce que Doctolib couvre déjà, votre journée type, vos irritants.</p></div>
+        <div class="step"><div class="n">2</div><h3>Démo sans risque</h3>
+          <p>Sur des tâches sans donnée patient : courriers, trames, éducation, veille.</p></div>
+        <div class="step"><div class="n">3</div><h3>Pilote ciblé</h3>
+          <p>1 à 2 cas concrets, périmètre clair. On mesure le temps réellement gagné.</p></div>
+        <div class="step"><div class="n">4</div><h3>Bilan</h3>
+          <p>Ce qui marche, ce qui ne marche pas. On décide ensemble. Rien de payant à ce stade.</p></div>
+      </div>
+      <div class="row">
+        <span class="pill">Sans facturation à ce stade</span>
+        <span class="pill">Sans engagement</span>
+        <span class="pill">On entre par l'aide</span>
+      </div>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span></div>
+  </section>
+
+  <!-- SLIDE 8 — Positionnement -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>Pourquoi MinervIA</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 8 / 9</div>
+    </div>
+    <div class="pad">
+      <span class="kicker">Ce qu'il faut retenir</span>
+      <h2>Une IA locale, un assistant,<br/>pas un cloud de plus</h2>
+      <div class="grid g2">
+        <div class="card"><div class="ic">0</div><h3>Zéro donnée patient</h3>
+          <p>L'outil n'en demande jamais. C'est ça, la vraie sécurité — et la vraie simplicité.</p></div>
+        <div class="card"><div class="ic">+</div><h3>Complément de Doctolib</h3>
+          <p>Doctolib garde le RDV et les rappels ; MinervIA prend le rédactionnel, la gestion, la veille.</p></div>
+      </div>
+      <div class="grid g2">
+        <div class="card"><div class="ic">✋</div><h3>Vous gardez la main</h3>
+          <p>L'IA prépare, vous validez, vous signez, vous assumez. La chaîne ne bouge pas.</p></div>
+        <div class="card"><div class="ic">FR</div><h3>Souverain, hébergé en France</h3>
+          <p>Une IA privée, conforme RGPD et AI Act, à taille humaine — pas une ferme du cloud.</p></div>
+      </div>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span></div>
+  </section>
+
+  <!-- SLIDE 9 — Merci -->
+  <section class="slide">
+    <div class="top">
+      <div class="brand">MinervIA <small>L'IA souveraine hébergée en France</small></div>
+      <div class="pageno">Cabinet de kinésithérapie · 9 / 9</div>
+    </div>
+    <div class="pad thanks">
+      <span class="kicker">MinervIA</span>
+      <h1>Merci</h1>
+      <p class="lead">Merci pour votre temps. Je reste à votre écoute pour vous faire gagner du
+        temps sur l'administratif — à votre rythme, sans engagement, et sans jamais toucher à vos
+        données patients.</p>
+      <div class="row">
+        <span class="pill">contact@minervia.fr</span>
+        <span class="pill">minervia.fr</span>
+      </div>
+    </div>
+    <div class="foot"><span><b>MinervIA</b> · contact@minervia.fr · minervia.fr</span></div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button id="prev" aria-label="Précédent">‹</button>
+  <div class="dots" id="dots"></div>
+  <button id="next" aria-label="Suivant">›</button>
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dots=document.getElementById('dots');
+  let i=0;
+  slides.forEach((_,k)=>{const d=document.createElement('div');d.className='dot'+(k===0?' on':'');dots.appendChild(d);});
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===i));
+  }
+  document.getElementById('next').onclick=()=>show(i+1);
+  document.getElementById('prev').onclick=()=>show(i-1);
+  addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')show(i+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp')show(i-1);
+  });
+</script>
+</body>
+</html>
