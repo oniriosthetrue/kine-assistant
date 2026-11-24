@@ -18,16 +18,19 @@ Un assistant Open WebUI pour kinésithérapeute libéral qui :
 |-----------|-------------|------------------------|
 | Modèle OWUI | `assistant-kine` (base `IA`) | `_system_prompt_kine.md` (prompt) + `_model_kine.json` (méta) |
 | Filtre outlet | `kine_zero_patient` | `_filtre_zero_donnee.py` |
-| Base de connaissances | `2b0c338d-1040-4d25-bb77-30a6873b1c42` (« Connaissance Kiné ») | `corpus-rag/` (10 fichiers indexés) |
+| Base de connaissances | `2b0c338d-1040-4d25-bb77-30a6873b1c42` (« Connaissance Kiné ») | `corpus-rag/` (13 fichiers indexés) |
 | Corpus source | — | `sources/NGAP-21062026.pdf` (228 p., ameli, 21/06/2026) |
 
-### Corpus indexé (10 fichiers, chacun < 4 Ko — sinon reset embedding)
+### Corpus indexé (13 fichiers, chacun < 4 Ko — sinon reset embedding)
 - `01-trames-courriers`, `02-education-patient`, `03-faq-admin-veille`
 - `04a-ngap-calcul-regles-bilans`, `04b1-ngap-actes-rachis-membres`,
   `04b2-ngap-actes-neuro-resp-divers`, `04c-ngap-domicile-acces-erreurs`
 - `05a-remboursement-prise-en-charge`, `05b-acces-direct-kine`, `05c-accords-prealables-apa`
+- `06-dpc-developpement-professionnel-continu`, `07-deontologie-ordre-mk`,
+  `08-teletransmission-fse-vitale` (ajoutés 2026-11-24)
 - Sur disque mais NON indexés (remplacés) : `04b-ngap-actes-chapitre-II.md`,
   `04-nomenclature-actes-ngap.md`
+- ⚠️ GET `/knowledge/{id}/files` renvoie la liste sous la clé **`items`** (pas `data`) en 0.13.4.
 
 ## 3. Le filtre « Zéro donnée patient » — logique contextuelle
 
@@ -49,6 +52,20 @@ Deux modes choisis selon la **présence d'une donnée patient dans le dernier me
    FIX = lookahead `(?!\s*/)` (dans `_SAFE_PATTERNS` ET le détecteur).
 4. **Date en toutes lettres** : le modèle réécrit « la séance du 12 mars 2026 » → fuite.
    FIX = motif agressif `\b\d{1,2}\s+(janvier|...|décembre)\b(?:\s*\d{2,4})?`.
+5. **Déclencheur par intention de rédaction** : une demande de CR/courrier SANS donnée
+   patient codable (« Redige un CR du 12/03/2026 ») restait non-agressive → date fuyée.
+   FIX = `_WRITING_INTENT_RE` (NOMS de documents seulement : courrier/lettre/compte-rendu/CR/
+   ordonnance/attestation/certificat/conclusion/gabarit/modele/trame). NE PAS y mettre de
+   verbes (« rédiger » déclencherait « fais-moi un calcul »). `_has_patient_data` =
+   `_PATIENT_DATA_RE` OU `_WRITING_INTENT_RE`.
+6. **Durée de référentiel en années** : « cycle DPC de 3 ans » était masqué (l'âge était un
+   motif SUR). FIX = l'âge `\b\d{1,3}\s*ans?\b` passe de `_SAFE_PATTERNS` à
+   `_AMBIGUOUS_PATTERNS` (masqué seulement en mode agressif). En MODE 1, une durée en années
+   est du référentiel ; en MODE 2 le modèle n'a pas le droit d'écrire un âge patient en dur.
+
+> ⚠️ **Redéployer un filtre exige `docker restart open-webui`** : l'API met à jour la base
+> mais NE recharge PAS le module Python déjà importé. Sans restart, l'ancien code tourne.
+> Le proxy renvoie 404/502 ~15 s pendant le restart → poller `https://api.minervia.fr/health`.
 
 ## 4. Commandes de redéploiement
 
@@ -78,10 +95,14 @@ POST /api/v1/models/model/update?id=assistant-kine
 python3 _upload_05.py   # téléverse 05a/05b/05c (multipart -> file_id -> file/add)
 ```
 
-## 5. Validation (3 tests UI, tous verts le 2026-11-24)
+## 5. Validation (tests UI, tous verts le 2026-11-24)
 1. Question remboursement → 60/40/80/90/100 %, 1€/4€/50€, 9,95−1=8,95€, dates de loi : **tout en dur**.
 2. Courrier « M. Dupont 45 ans 12/03/2026 EVA 7/10 amplitude 28/52 » → **tout masqué**, aucune fuite.
 3. Question citant « loi du 19/05/2023 » → reste non-agressif, chiffres préservés.
+4. « Redige un CR du 12/03/2026 » (sans nom) → date masquée `[A COMPLETER]` (déclencheur intention).
+5. « Demande d'accord préalable à domicile » → courrier MODE 2, toutes données patient en `[ ... ]`.
+6. « Le DPC est-il obligatoire ? » → retrieval `06-dpc`, « cycle de 3 ans » **conservé** en dur.
++ `python3 test_regress.py` rejoue tout en local (exit 0).
 
 ⚠️ Pour vérifier l'effet du filtre outlet, se fier au **snapshot d'accessibilité** (DOM rendu),
 PAS à `innerText` via Playwright (peut montrer le texte pré-filtre).
@@ -93,9 +114,22 @@ PAS à `innerText` via Playwright (peut montrer le texte pré-filtre).
 - Owner KB = admin test.qa (`98812e4c`) ; un **access_grant read** vers le user kine
   (`ecb710df`) est requis, sinon `query_knowledge_files` renvoie `[]`.
 
+## 6bis. Limites connues du filtre (à ne pas oublier)
+- **Nom de famille seul non masqué** : le filtre masque « civilité + nom » (M. Dupont) et
+  l'étiquette « Nom : … », mais un nom de famille isolé sans civilité ni étiquette passe.
+- **Scan du dernier message user uniquement** : une donnée patient donnée plus haut dans le
+  fil ne remet PAS le mode agressif sur les réponses suivantes (volontaire, évite les
+  faux-positifs). Un multi-tour « voici M. Dupont » puis « rédige un CR » peut donc rester
+  non-agressif si le dernier message ne contient ni marqueur ni mot-document.
+- **Le mode agressif est un filet, pas une garantie** : une donnée patient rédigée par le
+  modèle dans un format non prévu (ex. surnom, initiale seule, date relative « hier ») peut
+  subsister. Le prompt interdit d'inventer/saisir une donnée patient — c'est la 1re barrière.
+- **Le retrieval RAG ne marche qu'en UI (mode agent)** : la route OpenAI-compat
+  `/chat/completions` n'exécute PAS `query_knowledge_files` → ne jamais valider le RAG en curl.
+
 ## 7. Ce qui reste à faire / pistes
-- [ ] Étoffer le corpus (DPC, éthique Ordre, télétransmission) si besoin.
-- [ ] Éventuellement passer le corpus en embedding 4 bits / reranker (projet séparé).
+- [x] Étoffer le corpus (DPC, éthique Ordre, télétransmission) — fait 2026-11-24 (13 fichiers).
+- [ ] Éventuellement passer le corpus en embedding 4 bits / reranker (projet séparé, NON lancé).
 - [ ] Surveiller les faux négatifs du filtre (donnée patient non masquée) en usage réel.
 
 ## 8. Mémoire liée
