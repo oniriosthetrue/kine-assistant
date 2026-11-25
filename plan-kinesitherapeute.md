@@ -140,10 +140,41 @@ Pas besoin d'un cours de droit au kiné — juste de lever l'inquiétude :
 - **Une règle d'or écrite dans l'outil et la CGU** : *« ne saisis jamais de nom ni d'info patient ».*
   (Sans ce rappel visible, un kiné distrait collerait un nom un jour — et la promesse tomberait.)
 
+### 5bis. « Je ne suis PAS hébergeur de données de santé » — l'argument massue (et son prix)
+
+C'est la **conséquence directe** de « zéro donnée patient », pas une promesse à côté :
+
+> *« L'obligation HDS (hébergeur de données de santé) ne tombe que sur celui qui héberge des
+> données de santé pour le compte d'un tiers. Cet outil n'en reçoit jamais une seule → il n'y a
+> rien à héberger → je ne suis pas hébergeur, et je n'ai pas à l'être. Tu n'as donc aucune
+> certification HDS à me demander, aucun audit d'hébergement à faire sur moi. »*
+
+**Pourquoi ce n'est PAS une contradiction** : la chaîne est logique de bout en bout —
+*jamais de donnée patient ⇒ rien à héberger ⇒ pas d'obligation HDS*. L'absence de donnée est la
+**preuve** qu'on n'est pas hébergeur, pas une échappatoire.
+
+**Le prix de cette garantie (à assumer, pas à cacher)** : la promesse tient tant que **zéro**
+donnée patient n'entre. Le jour où un kiné colle un nom/âge/diagnostic dans la conversation,
+cette donnée transite et se stocke sur le serveur → on héberge une donnée de santé pour un tiers,
+et l'obligation HDS tombe. **Le filtre « zéro donnée patient » + la CGU ne sont donc pas du
+marketing : c'est le bouclier juridique.** Ils doivent être (a) appliqués techniquement (filtre de
+sortie qui masque toute donnée identifiante — en place), (b) écrits noir sur blanc dans la CGU
+(« le client s'interdit de saisir une donnée patient »).
+
+**Le levier qui rend ça inattaquable — le déploiement local** : si l'outil tourne sur la **machine
+du kiné** (modèle local), la donnée ne quitte jamais le cabinet, même en cas d'erreur de saisie,
+et **on n'héberge physiquement rien** → impossible d'être qualifié d'hébergeur, même en théorie.
+Le kiné redevient son propre hébergeur (les mêmes obligations que pour son logiciel métier actuel).
+
+| Mode | Où tourne le modèle | Risque HDS pour le prestataire |
+|---|---|---|
+| **Hébergé** (`api.minervia.fr`) | serveur du prestataire | Tenu par la promesse « zéro donnée » : le filtre + la CGU sont la garantie. Un seul écart = HDS exigible. |
+| **Local** (PC du kiné) | machine du kiné | **Aucun** : le prestataire ne reçoit ni ne stocke rien. Le kiné est son propre hébergeur. |
+
 > Nuance d'honnêteté à garder pour soi : si un jour on veut un usage où la donnée patient entre
-> vraiment (ex. « reformule ce CR que j'ai écrit »), alors il faut un **modèle local sur le PC du
-> kiné** (la donnée ne sort pas) — et le contrat doit l'écrire. On ne promet pas ce qu'on ne peut
-> pas faire proprement.
+> vraiment (ex. « reformule ce CR que j'ai écrit »), alors il faut le **déploiement local** (la
+> donnée ne sort pas) — et le contrat doit l'écrire. On ne promet pas ce qu'on ne peut pas faire
+> proprement.
 
 ---
 
@@ -160,11 +191,15 @@ Pas besoin d'un cours de droit au kiné — juste de lever l'inquiétude :
 
 ---
 
-## 7. Positionnement MinervIA (les 4 messages à laisser)
+## 7. Positionnement MinervIA (les 5 messages à laisser)
 
 - **Zéro donnée patient** : l'outil n'en demande jamais — c'est ça, la vraie sécurité. Le kiné a
   déjà ses données *chez Doctolib* (HDS) ; l'assistant, lui, n'en reçoit **aucune** → il s'ajoute
   sans le moindre risque RGPD supplémentaire.
+- **Je ne suis pas hébergeur de données de santé** : conséquence directe du point précédent — pas
+  de donnée reçue, donc rien à héberger, donc **aucune obligation ni certification HDS**. Le kiné
+  n'a aucun audit d'hébergement à exiger. (En déploiement local, c'est inattaquable : la donnée ne
+  quitte jamais son cabinet.)
 - **Complément de Doctolib, pas concurrent** : *Doctolib = les mains* (RDV, rappels, FSE, paiement) ;
   *l'assistant = la tête* (expliquer la règle NGAP, rédiger, expliquer la physio, DPC). Zéro
   chevauchement : l'assistant produit le contenu, Doctolib l'exécute.
