@@ -41,13 +41,20 @@ Puis la frontière Doctolib (le kiné est déjà dessus — ne jamais le concurr
 
 ---
 
+## 1bis. La question d'ouverture — le « waouh » (3-4 min, optionnel mais recommandé)
+
+Avant le menu, **une vraie question de kiné, multi-sauts**, pour montrer qu'il **raisonne**.
+Voir `module-0-ouverture.md` (ALD + cumul BDK + reste à charge). C'est la réponse la plus
+impressionnante — mais la plus **longue** (~1-2 min). À annoncer et à ne pas lancer en parallèle.
+
 ## 2. Menu à la carte — le kiné choisit
 
 Proposer le menu, laisser le kiné pointer ce qui le démange. Chaque module a sa fiche.
 
 | # | Module | Ce que ça répond | Fiche |
 |---|--------|------------------|-------|
-| 1 | **Règlementaire NGAP** | « AMK ou AMT ? », accès direct, accord préalable | `module-1-reglementaire.md` |
+| 0 | **Ouverture (waouh)** | ALD + cumul BDK + reste à charge (raisonnement) | `module-0-ouverture.md` |
+| 1 | **Règlementaire NGAP** | « AMK ou AMT ? » (piège), accès direct, accord préalable | `module-1-reglementaire.md` |
 | 2 | **Manuel physio / anatomie** | biomécanique, mécanisme d'une patho, **cité** | `module-2-physio.md` |
 | 3 | **Rédaction CR / courriers** + **filtre zéro donnée** | trame à champs `[...]`, et la preuve que rien ne sort | `module-3-redaction-filtre.md` |
 | 4 | **Éducation patient** | fiche d'info générique à remettre | `module-4-education.md` |
