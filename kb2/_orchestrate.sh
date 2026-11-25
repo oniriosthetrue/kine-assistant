@@ -51,7 +51,7 @@ done
 N=$(sort -u /tmp/kb2_ids.txt | wc -l)
 log "suppression de $N fichiers..."
 while read -r fid; do
-  docker exec open-webui sh -c "curl -s -X DELETE -H 'Authorization: Bearer $TOK' '$BASE/knowledge/$KB/file/$fid'" >/dev/null
+  docker exec open-webui sh -c "curl -s -X POST -H 'Authorization: Bearer $TOK' -H 'Content-Type: application/json' -d '{\"file_id\":\"$fid\"}' '$BASE/knowledge/$KB/file/remove'" >/dev/null
 done < <(sort -u /tmp/kb2_ids.txt)
 log "purge faite"
 

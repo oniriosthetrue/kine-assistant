@@ -28,14 +28,24 @@ def sh(c):
 
 
 def existing_files():
-    lst = sh(f'docker exec {CONTAINER} sh -c \'curl -s "{BASE}/knowledge/{KB2}/files" '
-             f'-H "Authorization: Bearer {ADMIN}"\'')
-    try:
-        data = json.loads(lst)
-    except Exception:
-        return set()
-    items = data.get("items") or data.get("data") or []
-    return {it.get("filename") or it.get("name") for it in items}
+    names = set()
+    page = 1
+    while True:
+        lst = sh(f'docker exec {CONTAINER} sh -c \'curl -s '
+                 f'"{BASE}/knowledge/{KB2}/files?page={page}&content=false" '
+                 f'-H "Authorization: Bearer {ADMIN}"\'')
+        try:
+            data = json.loads(lst)
+        except Exception:
+            break
+        items = data.get("items") or data.get("data") or []
+        if not items:
+            break
+        names.update(it.get("filename") or it.get("name") for it in items)
+        if len(names) >= data.get("total", 0):
+            break
+        page += 1
+    return names
 
 
 def main() -> None:
