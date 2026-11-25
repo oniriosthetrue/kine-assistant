@@ -51,21 +51,46 @@ vrai gisement de temps — et on n'a pas besoin d'y toucher, aux données de san
 
 ---
 
+## 1bis. Le kiné est déjà sur Doctolib : la frontière exacte (à ne jamais survendre)
+
+Le kiné cible utilise **déjà Doctolib** (souvent l'offre Pro). Doctolib est un **bras
+opérationnel** : il exécute. Il n'a **aucune intelligence rédactionnelle ni pédagogique**.
+Ne JAMAIS prétendre que l'assistant refait ce que Doctolib fait déjà — ça décrédibilise.
+
+| Tâche | Doctolib (déjà en place) | L'assistant apporte en PLUS |
+|---|---|---|
+| RDV en ligne, agenda, rappels SMS | ✅ fait | ❌ rien — ne pas y toucher |
+| **Télétransmission FSE / facturation** | ✅ émet la vraie FSE | ⚠️ n'émet RIEN : il **explique** la cotation, il ne cotte pas |
+| Paiement, téléconsultation, messagerie patient | ✅ fait | ❌ rien |
+| Envoi de documents/ordonnances | ✅ fait | ⚠️ il **rédige** la trame, Doctolib l'envoie |
+| **Comprendre une règle NGAP** (AMK/AMT, accès direct, accord préalable, ALD) | ❌ jamais | ✅ **répond, sourcé sur le NGAP ameli** |
+| **Rédiger** un CR / courrier confraternel | ❌ jamais | ✅ produit la trame à champs `[...]` |
+| **Éducation patient** (fiches, explication patho) | ❌ jamais | ✅ contenu générique, le kiné personnalise |
+| **Manuel de physiologie / anatomie** | ❌ jamais | ✅ 630 sources, réponses citées |
+| **DPC / veille** (résumer une reco HAS) | ❌ limité | ✅ synthèse documentaire |
+
+> **Phrase-clé** : *« Doctolib, ce sont tes mains — agenda, FSE, paiement. Lui, c'est ta tête :
+> il t'explique la règle, il te rédige, il t'explique la physio. Ça ne se marche pas dessus. »*
+
+---
+
 ## 2. Ce que l'IA fait SANS aucune donnée patient (le cœur du pitch)
 
-À montrer en démo, parce que c'est là que le gain est immédiat et sans risque.
+À montrer en démo, parce que c'est là que le gain est immédiat, sans risque, **et que Doctolib
+ne va pas**. Les 2 premiers blocs sont les vrais différenciateurs.
 
 | Domaine | Ce que l'IA produit | Entrée (aucune donnée patient) |
 |---|---|---|
-| **Courriers & courriers types** | Courrier au médecin, à la caisse, à l'assureur, relance impayé, accusé, attestation | « rédige un courrier de relance impayé, ton pro » |
-| **Trames de comptes-rendus** | Une **trame neutre** de CR (ex. fin de rééduc lombalgie) à remplir soi-même | « trame de CR de fin de rééduc pour lombalgie chronique » |
+| **Règlementaire NGAP *expliqué*** | Pourquoi AMK/AMT, accès direct, accord préalable, renouvellement, ALD, DPC — **avec le vrai tarif/taux sourcé** | « c'est quoi l'accès direct kiné et pour quelles pathos ? » |
+| **Manuel de physio / anatomie** | Physiologie d'un tissu, mécanisme d'une patho, logique d'une rééduc, **réponse citée** | « explique la biomécanique de la coiffe des rotateurs » |
+| **Courriers & trames de CR** | Courrier au médecin/caisse/assureur, **trame neutre** de CR à champs `[...]` | « trame de CR de fin de rééduc pour lombalgie chronique » |
 | **Éducation du patient** | Fiches d'exercices, conseils de reprise, explication d'une pathologie | contenu **générique**, personnalisé ensuite par le kiné |
 | **Veille & formation (DPC)** | Résumer un article, une reco HAS, un protocole, préparer un dossier | littérature **publique**, aucun patient |
-| **Gestion du cabinet** | E-mails fournisseurs, comparatif de devis, notes, prépa RDV comptable | administratif pur |
-| **Communication** | Site web, fiches d'info, messages « horaires / cabinet fermé », FAQ | information générale |
+| **Back-office non-Doctolib** | E-mails fournisseurs, comparatif de devis, notes, prépa comptable | administratif pur (ce que Doctolib ne gère pas) |
 
-> Message : « sur tout ça, la donnée patient **n'existe pas dans ce que tu saisis**. Donc rien
-> à protéger, rien qui sort — et pourtant c'est la plus grosse part de ton temps perdu. »
+> Message : « sur tout ça, la donnée patient **n'existe pas dans ce que tu saisis**, et
+> **Doctolib ne le fait pas**. Donc rien à protéger, rien qui sort — et c'est du temps que tu
+> ne récupérais nulle part. »
 
 ---
 
@@ -137,9 +162,12 @@ Pas besoin d'un cours de droit au kiné — juste de lever l'inquiétude :
 
 ## 7. Positionnement MinervIA (les 4 messages à laisser)
 
-- **Zéro donnée patient** : l'outil n'en demande jamais — c'est ça, la vraie sécurité.
-- **Complément de Doctolib, pas concurrent** : Doctolib garde le RDV et les rappels ; MinervIA
-  prend le rédactionnel, le back-office, la veille, l'éducation.
+- **Zéro donnée patient** : l'outil n'en demande jamais — c'est ça, la vraie sécurité. Le kiné a
+  déjà ses données *chez Doctolib* (HDS) ; l'assistant, lui, n'en reçoit **aucune** → il s'ajoute
+  sans le moindre risque RGPD supplémentaire.
+- **Complément de Doctolib, pas concurrent** : *Doctolib = les mains* (RDV, rappels, FSE, paiement) ;
+  *l'assistant = la tête* (expliquer la règle NGAP, rédiger, expliquer la physio, DPC). Zéro
+  chevauchement : l'assistant produit le contenu, Doctolib l'exécute.
 - **L'humain garde la main** : l'IA prépare, le kiné valide, signe et assume.
 - **On entre par l'aide** : diagnostic puis pilote gratuit, sans facturation ni engagement.
 
