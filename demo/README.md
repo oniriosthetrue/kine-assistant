@@ -16,7 +16,7 @@ Chaque fiche contient le **prompt exact** et le **résultat réellement observé
 
 | Module | Routage | Sources | Verdict |
 |---|---|---|---|
-| 1 — Règlementaire | KB1 | ameli/NGAP | ✅ chiffres exacts + source |
+| 1 — Règlementaire | KB1 | ameli/NGAP (17) | ✅ refuse la prémisse fausse « AMT » + BDK chiffré |
 | 2 — Physio | KB2 | OpenStax | ✅ structuré + honnête si hors-base |
 | 3 — Rédaction + filtre | KB1 | trame | ✅ trame `[...]` + **filtre masque la donnée patient** |
 | 4 — Éducation | KB1+KB2 | lombalgie | ✅ fiche générique, 6 sources, 0 patient |
