@@ -1,4 +1,4 @@
-# Module 0 — La question d'ouverture (le « waouh »)
+# Module 1 — La question d'ouverture (le « waouh »)
 
 **À jouer EN PREMIER**, avant le menu. Une vraie question de kiné, multi-sauts, qui
 montre d'emblée que l'outil **raisonne** et pas juste « retrouve un texte ». Si ça
@@ -57,7 +57,7 @@ Pointer en direct : **« Exploring query_knowledge_files »** qui s'incrémente
 
 C'est la réponse la plus **longue** de la démo (**~1-2 min**, 4 requêtes, 14 sources).
 **À annoncer** (« là il bosse sérieusement, laisse-le finir ») et à **ne pas lancer en
-parallèle** d'un autre module. Si le réseau est lent ce jour-là, avoir le module 1
+parallèle** d'un autre module. Si le réseau est lent ce jour-là, avoir le module 3
 (question piège AMT, plus rapide) en **roue de secours** pour l'ouverture.
 
 ## Limite à dire

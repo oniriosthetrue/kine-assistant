@@ -1,4 +1,4 @@
-# Module 3 — Rédaction CR/courriers + filtre « zéro donnée patient »
+# Module 2 — Rédaction CR/courriers + filtre « zéro donnée patient »
 
 **LE clou du spectacle.** On montre deux choses d'un coup :
 1. l'assistant **rédige** une trame de compte-rendu pro à champs `[...]` à remplir ;

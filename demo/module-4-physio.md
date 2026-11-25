@@ -1,4 +1,4 @@
-# Module 2 — Manuel de physiologie / anatomie
+# Module 4 — Manuel de physiologie / anatomie
 
 **Ce qu'on démontre** : l'assistant sert de **manuel de référence** — biomécanique,
 mécanisme d'une pathologie, logique de rééducation — et **cite ses sources** (KB2,

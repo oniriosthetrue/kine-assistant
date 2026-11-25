@@ -1,4 +1,4 @@
-# Module 5 — DPC / veille
+# Module 6 — DPC / veille
 
 **Ce qu'on démontre** : l'assistant répond aux obligations de **Développement Professionnel
 Continu** avec les règles exactes (cycle, obligations, organismes référencés), **sourcées**

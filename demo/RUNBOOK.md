@@ -41,28 +41,23 @@ Puis la frontière Doctolib (le kiné est déjà dessus — ne jamais le concurr
 
 ---
 
-## 1bis. La question d'ouverture — le « waouh » (3-4 min, optionnel mais recommandé)
-
-Avant le menu, **une vraie question de kiné, multi-sauts**, pour montrer qu'il **raisonne**.
-Voir `module-0-ouverture.md` (ALD + cumul BDK + reste à charge). C'est la réponse la plus
-impressionnante — mais la plus **longue** (~1-2 min). À annoncer et à ne pas lancer en parallèle.
-
 ## 2. Menu à la carte — le kiné choisit
 
 Proposer le menu, laisser le kiné pointer ce qui le démange. Chaque module a sa fiche.
+**Les numéros suivent l'ordre de passage conseillé.**
 
 | # | Module | Ce que ça répond | Fiche |
 |---|--------|------------------|-------|
-| 0 | **Ouverture (waouh)** | ALD + cumul BDK + reste à charge (raisonnement) | `module-0-ouverture.md` |
-| 1 | **Règlementaire NGAP** | « AMK ou AMT ? » (piège), accès direct, accord préalable | `module-1-reglementaire.md` |
-| 2 | **Manuel physio / anatomie** | biomécanique, mécanisme d'une patho, **cité** | `module-2-physio.md` |
-| 3 | **Rédaction CR / courriers** + **filtre zéro donnée** | trame à champs `[...]`, et la preuve que rien ne sort | `module-3-redaction-filtre.md` |
-| 4 | **Éducation patient** | fiche d'info générique à remettre | `module-4-education.md` |
-| 5 | **DPC / veille** | obligations, cycle, sources | `module-5-dpc.md` |
+| 1 | **Ouverture (waouh)** | ALD + cumul BDK + reste à charge (raisonnement) | `module-1-ouverture.md` |
+| 2 | **Rédaction CR / courriers** + **filtre zéro donnée** | trame à champs `[...]`, et la preuve que rien ne sort | `module-2-redaction-filtre.md` |
+| 3 | **Règlementaire NGAP** | « AMK ou AMT ? » (piège), accès direct, accord préalable | `module-3-reglementaire.md` |
+| 4 | **Manuel physio / anatomie** | biomécanique, mécanisme d'une patho, **cité** | `module-4-physio.md` |
+| 5 | **Éducation patient** | fiche d'info générique à remettre | `module-5-education.md` |
+| 6 | **DPC / veille** | obligations, cycle, sources | `module-6-dpc.md` |
 
-> Ordre conseillé si le kiné hésite : **1 → 3 → 2 → 4 → 5**.
-> Le module 3 est le clou du spectacle (on voit le filtre masquer une donnée patient
-> en direct) — le garder pour frapper fort.
+> Ordre conseillé si le kiné hésite : **1 → 2 → 3 → 4 → 5 → 6**.
+> Le module 1 (ouverture) accroche dès la 1ʳᵉ minute ; le module 2 est le clou
+> (on voit le filtre masquer une donnée patient en direct).
 
 ---
 
@@ -75,7 +70,7 @@ Proposer le menu, laisser le kiné pointer ce qui le démange. Chaque module a s
 4. **Lire la réponse ensemble**, pointer ce qui compte (le tarif exact, la source, le `[...]`).
 5. Enchaîner ou rebondir sur une question du kiné.
 
-> ⚠️ **Filtre (module 3)** : ne **jamais** juger le filtre pendant la génération.
+> ⚠️ **Filtre (module 2)** : ne **jamais** juger le filtre pendant la génération.
 > Le masque s'applique **après** la fin (« Response complete »). Attendre la fin,
 > puis montrer que le nom/âge/EVA sont devenus `[A COMPLETER]`.
 

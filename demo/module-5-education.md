@@ -1,4 +1,4 @@
-# Module 4 — Éducation du patient
+# Module 5 — Éducation du patient
 
 **Ce qu'on démontre** : l'assistant produit une **fiche d'information patient générique**,
 claire, prête à personnaliser et à remettre. Gain de temps sur un livrable qu'on refait
@@ -27,7 +27,7 @@ d'hygiène de vie à donner.
 ## Ce qu'on pointe à l'écran
 
 - Le **langage simple** (le kiné reconnaît ce qu'il dirait à un patient).
-- L'absence totale de patient → cohérent avec l'angle du module 3.
+- L'absence totale de patient → cohérent avec l'angle du module 2.
 
 ## Limite à dire
 

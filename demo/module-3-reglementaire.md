@@ -1,4 +1,4 @@
-# Module 1 — Règlementaire NGAP expliqué
+# Module 3 — Règlementaire NGAP expliqué
 
 **Ce qu'on démontre** : l'assistant répond aux questions de cotation avec le **vrai
 tarif/taux sourcé du NGAP ameli**, et surtout il **refuse d'inventer** : si une prémisse
